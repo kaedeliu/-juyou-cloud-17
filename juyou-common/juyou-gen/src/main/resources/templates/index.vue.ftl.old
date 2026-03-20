@@ -1,0 +1,131 @@
+<template>
+  <div class="v-popup">
+    <el-form :model="formData" :rules="rules" ref="formData" label-width="100px" class="formData">
+      <sysFormItem
+        v-for="(obj, i) in formList"
+        :key="i"
+        :type="obj.type"
+        :label="obj.label"
+        :prop="obj.prop"
+        :option="obj.option"
+        :placeholder="obj.message"
+        val="val"
+        lab="name"
+        v-model="queryData[obj.prop]"
+        class="formItem"
+        size="small"
+      ></sysFormItem>
+      <el-form-item label="密码" prop="pass">
+        <el-input type="password" v-model="formData.pass" autocomplete="off"></el-input>
+      </el-form-item>
+    </el-form>
+    <div>
+      <el-button type="primary" @click="submitBtn">确定</el-button>
+    </div>
+  </div>
+</template>
+
+<#if customTable[table.name]??>
+      <#assign customTableData=customTable[table.name]/>
+</#if>
+
+<script>
+import sysFormItem from "@comp/sysFormItem.vue";
+export default {
+  components: { sysFormItem },
+  props: {
+    popupData: {
+      type: Object,
+      default: () => {
+        return {};
+      }
+    }
+  },
+  name: "",
+  data() {
+    let validator = (rule, value, callback, regular, message) => {
+      let patt = new RegExp(regular);
+      if (patt.test(value)) {
+        callback();
+      } else {
+        callback(new Error(message));
+      }
+    };
+    return {
+      formData: {
+        pass: ""
+      },
+      formList: [
+         <#list table.fields as field>
+          <#if customTableData?? && customTableData[field.annotationColumnName]??>
+               <#assign customField=customTableData[field.annotationColumnName]/>
+          <#else>
+               <#assign customField=""/>
+          </#if>
+          <#if customField?? && customField!="" && ((customField.addColumns?? && customField.addColumns==1) || ( customField.editColumns?? && customField.editColumns==1))>
+                { label: "${customField.fieldDesc!}", prop: "${field.propertyName}" ,type:"${customField.outType}" <#if customField.ditcType??>,options: "${customField.ditcType}"</#if>},
+          </#if>
+       </#list>
+      ],
+      rules: {
+        <#list table.fields as field>
+          <#if customTableData?? && customTableData[field.annotationColumnName]??>
+               <#assign customField=customTableData[field.annotationColumnName]/>
+          <#else>
+               <#assign customField=""/>
+          </#if>
+          <#if customField?? && customField!="" && ((customField.addColumns?? && customField.addColumns==1) || ( customField.editColumns?? && customField.editColumns==1))
+            && ((customField.notNullColumns?? && customField.notNullColumns==1) || (customField.regExp??))>
+                ${field.propertyName}:[
+                    <#if customField.notNullColumns?? && customField.notNullColumns==1>
+                        { required: true, message: "请输入${customField.fieldDesc!}名称", trigger: "blur" }
+                    </#if>
+                    <#if customField.regExp??>
+                        <#if customField.notNullColumns?? && customField.notNullColumns==1>,</#if>
+                        {
+                            validator: (rule, value, callback) => {
+                              validator(rule, value, callback, '${customField.regExp}', '${customField.regMsg!'${customField.fieldDesc!}输入错误'}');
+                            },
+                            trigger: "blur"
+                        }
+                    </#if>
+                ]
+          </#if>
+       </#list>
+        }
+    };
+  },
+  methods: {
+    init() {
+      this.formData = {};
+      this.formData = { ...this.popupData };
+    },
+    submitBtn() {
+      this.$refs.formData.validate(valid => {
+        if (valid) {
+          if (this.formData.seq) {
+            this.$http.formwork.edit({ ...this.formData }).then(res => {
+              if (res.success) {
+                this.$emit("close");
+              }
+            });
+          } else {
+            this.$http.formwork.add({ ...this.formData }).then(res => {
+              if (res.success) {
+                this.$emit("close");
+              }
+            });
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    }
+  },
+  mounted() {}
+};
+</script>
+
+<style lang="scss" scoped>
+</style>

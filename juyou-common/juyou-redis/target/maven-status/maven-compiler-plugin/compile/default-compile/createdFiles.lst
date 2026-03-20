@@ -1,0 +1,3 @@
+com\juyou\redis\RedisConfig.class
+com\juyou\redis\RedisLock.class
+com\juyou\redis\RedisUtil.class

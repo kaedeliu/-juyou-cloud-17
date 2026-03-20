@@ -1,0 +1,43 @@
+spring:
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  datasource:
+    druid:
+      stat-view-servlet:
+        enabled: true
+        loginUsername: admin
+        loginPassword: 123456
+      web-stat-filter:
+        enabled: true
+    dynamic:
+      druid:
+        initial-size: 1
+        min-idle: 1
+        maxActive: 100
+        maxWait: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 1 FROM DUAL
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat,wall,slf4j
+        connectionProperties: druid.stat.mergeSql\=true;druid.stat.slowSqlMillis\=5000
+      datasource:
+        master:
+          url: jdbc:mysql://127.0.0.1:3306/jykj?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT
+          username: root
+          password: Hy080691#
+          driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  global-config:
+    banner: false
+    db-config:
+      table-underline: true
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    call-setters-on-nulls: true

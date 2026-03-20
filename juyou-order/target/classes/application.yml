@@ -1,0 +1,12 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+springfox:
+  documentation:
+    enabled: true
+
+knife4j:
+  enable: true
+

@@ -1,0 +1,15 @@
+server: 
+   port: 8156
+   tomcat:
+      max-threads: 500
+      uri-encoding: utf-8
+spring:
+    servlet:
+      multipart:
+        enabled: true
+        max-file-size: 2MB
+        max-request-size: 5MB
+    mvc:
+      pathmatch:
+        use-suffix-pattern: false
+        matching-strategy: ant_path_matcher

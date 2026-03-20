@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.juyou</groupId>
+        <artifactId>juyou</artifactId>
+        <version>1.0</version>
+    </parent>
+    <packaging>pom</packaging>
+    <artifactId>juyou-common</artifactId>
+    <description>公共模块</description>
+    <version>1.0</version>
+
+    <modules>
+        <module>juyou-base</module>
+        <module>juyou-service</module>
+        <module>juyou-redis</module>
+        <module>juyou-gen</module>
+        <module>juyou-pay</module>
+        <module>juyou-security</module>
+        <module>juyou-mg-cms</module>
+    </modules>
+
+</project>

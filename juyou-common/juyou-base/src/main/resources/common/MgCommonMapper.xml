@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juyou.common.mapper.MgCommonMapper">
+
+
+    <!-- 登录用户获取信息 -->
+    <select id="findLoginUserDto" parameterType="String" resultType="com.juyou.common.dto.LoginUserDto">
+        SELECT a.* FROM juyou_sys_user a  where a.user_id=#{userId}
+    </select>
+
+    <select id="findUserIdByName" parameterType="String" resultType="String">
+        SELECT user_id FROM juyou_sys_user  where name=#{userName} limit 1
+    </select>
+
+    <select id="findRoleByUser" parameterType="String" resultType="String">
+        SELECT
+        b.code
+        FROM
+        juyou_sys_user_role AS a
+        JOIN juyou_sys_role AS b ON a.role_id = b.role_id
+        WHERE
+        a.user_id = #{userId} and b.status=1 GROUP BY b.code
+    </select>
+
+    <select id="findRoleAuth" parameterType="String" resultType="String">
+        SELECT
+        c.auth_url
+        FROM
+        juyou_sys_role as a
+        join  juyou_sys_role_permission AS b on a.role_id=b.role_id
+        JOIN juyou_sys_permission AS c ON b.permission_id = c.permission_id
+        WHERE
+        c.type = 2
+        and a.status=1
+        and a.code = #{roleCode}
+        and c.sys_type=0
+        GROUP BY c.auth_url;
+    </select>
+
+    <select id="findTenantsAdminAuth" resultType="String">
+        SELECT
+        auth_url
+        FROM
+        JOIN juyou_sys_permission
+        WHERE
+        type = 2
+        and sys_type=0
+        and status=1
+        GROUP BY c.auth_url;
+    </select>
+
+
+    <!--	<select id="findRolesAuth" parameterType="String" resultType="String">-->
+    <!--		SELECT-->
+    <!--		c.auth_url-->
+    <!--		FROM-->
+    <!--		juyou_sys_role as a-->
+    <!--		join  juyou_sys_role_permission AS b on a.role_id=b.role_id-->
+    <!--		JOIN juyou_sys_permission AS c ON b.permission_id = c.permission_id-->
+    <!--		WHERE-->
+    <!--		c.type = 2-->
+    <!--		and a.code in-->
+    <!--		<foreach item="item" index="index" collection="roleIds" open="(" separator="," close=")">-->
+    <!--			#{item}-->
+    <!--		</foreach>-->
+    <!--		GROUP BY c.auth_url;-->
+    <!--	</select>-->
+
+    <select id="findTenants" parameterType="String" resultType="com.juyou.common.dto.TenantsBasicDto">
+        select * from juyou_sys_tenants where tenants_id=#{tenantsId};
+    </select>
+
+
+</mapper>

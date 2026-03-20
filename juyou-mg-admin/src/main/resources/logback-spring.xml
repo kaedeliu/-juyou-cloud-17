@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <springProperty scope="context" name="PROJECT_NAME" source="spring.application.name"  defaultValue=""/>
+    <property name="mapper.package" value="com.juyou.*.mapper" />
+
+    <!-- nacos名字不要改动，不然会造成启动报警告，Failed to rename context Context has been already given a name nacos
+    原因：项目框架 集成logback 与nacos 自带的logback 冲突， nacos的logback 已经先于 项目启动-->
+    <contextName>nacos</contextName>
+
+    <!-- ch.qos.logback.core.ConsoleAppender 控制台输出 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%level] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- 日志级别 -->
+    <root level="INFO">
+        <appender-ref ref="console" />
+    </root>
+
+</configuration>

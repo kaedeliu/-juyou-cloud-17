@@ -1,0 +1,21 @@
+spring:
+  security:
+    enabled: false
+  autoconfigure:
+    exclude:
+      # 本项目鉴权使用 Apache Shiro；不需要 Spring Security 默认登录重定向，否则 /v3/api-docs 会被 302
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+      - org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+knife4j:
+  enable: true
+

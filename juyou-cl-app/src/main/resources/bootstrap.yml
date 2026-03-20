@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: juyou-cl-app
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      username: nacos
+      password: nacos
+      config:
+        enabled: true
+        server-addr: 127.0.0.1:8848
+        refresh-enabled: true
+        group: ${spring.profiles.active}
+        namespace: office-${spring.profiles.active}
+        file-extension: yml
+        ext-config:
+          - data-id: datasource.yml
+            group: ${spring.profiles.active}
+            refresh: true
+          - data-id: redis.yml
+            group: ${spring.profiles.active}
+            refresh: true
+          - data-id: common.yml
+            group: ${spring.profiles.active}
+            refresh: true
+          - data-id: juyou-cl-app.yml
+            group: ${spring.profiles.active}
+            refresh: true

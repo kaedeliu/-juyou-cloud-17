@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juyou.admin.sys.mapper.RolePermissionMapper">
+	<select id="queryByRoleId" parameterType="String" resultType="String">
+		SELECT
+			p.permission_id 
+		FROM
+			juyou_sys_role_permission rp,
+			juyou_sys_permission p 
+		WHERE
+			rp.permission_id = p.permission_id 
+			AND p.STATUS = 1
+			AND rp.role_id = #{roleId}
+		ORDER BY p.sequence desc
+	</select>
+</mapper>

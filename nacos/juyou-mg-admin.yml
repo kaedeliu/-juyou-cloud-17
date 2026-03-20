@@ -1,0 +1,23 @@
+server:
+  port: 8190
+
+spring:
+  mvc:
+    pathmatch:
+      use-suffix-pattern: false
+      matching-strategy: ant_path_matcher
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+knife4j:
+  enable: true
+
+cdyx:
+  task:
+    enable: false
+    type: 3
+

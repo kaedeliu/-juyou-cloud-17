@@ -1,0 +1,8 @@
+cdyx:
+    gen:
+        url: jdbc:mysql://106.52.96.249:3306/yx_active?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT
+        username: active
+        password: active_#$%
+        outputDir: d:\test\test2\
+        tablePrefixs: yx_,cc_
+        zipPath: d:\test\test2\

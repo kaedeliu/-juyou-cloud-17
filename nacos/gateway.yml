@@ -1,0 +1,80 @@
+server:
+  port: 8184
+  tomcat:
+    max-threads: 500
+    uri-encoding: UTF-8
+    accesslog:
+      enabled: false
+
+hystrix:
+  threadpool:
+    default:
+      coreSize: 100
+      maxQueueSize: 1500
+      queueSizeRejectionThreshold: 1000
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: THREAD
+          thread:
+            timeoutInMilliseconds: 30000
+    fallbackcmd:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000
+              
+spring:
+  application:
+    name: gateway
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  datasource:
+    druid:
+      stat-view-servlet:
+        enabled: false
+        allow:
+      web-stat-filter:
+        enabled: false
+  cloud:
+    gateway:
+      discovery:
+         locator:
+            enabled: true
+            lower-case-service-id: true
+      default-filters:
+        - AddRequestHeader=X-Internal-Gateway,true
+      routes:
+          - id: juyou-admin
+            uri: lb://juyou-mg-admin
+            predicates:
+                - Path=/admin/**
+            filters:
+                - StripPrefix=1
+          - id: juyou-app
+            uri: lb://juyou-cl-app
+            predicates:
+                - Path=/app/**
+            filters:
+                - StripPrefix=1
+          - id: juyou-order
+            uri: lb://juyou-order
+            predicates:
+                - Path=/order/**
+            filters:
+                - StripPrefix=1
+knife4j:
+  gateway:
+    enabled: true
+    strategy: manual
+    routes:
+      - name: 管理端
+        service-name: juyou-mg-admin
+        url: /admin/v3/api-docs
+      - name: 客户端
+        service-name: juyou-cl-app
+        url: /app/v3/api-docs
+      - name: 订单管理
+        service-name: juyou-order
+        url: /order/v3/api-docs

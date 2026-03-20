@@ -1,0 +1,39 @@
+spring:
+  application:
+     name: gateway
+  main:
+    web-application-type: reactive
+  autoconfigure:
+      exclude:
+        - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+        - com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+        - org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration
+  profiles:
+     active: dev
+  cloud:
+     nacos:
+        username: nacos
+        password: nacos
+        config:
+          enabled: true
+          server-addr: 127.0.0.1:8848
+          refresh-enabled: true
+          group: ${spring.profiles.active}
+          namespace: office-${spring.profiles.active}
+          file-extension: yml
+          ext-config:
+             - data-id: gateway.yml
+               group: ${spring.profiles.active}
+               refresh: true
+             - data-id: redis.yml
+               group: ${spring.profiles.active}
+               refresh: true
+             - data-id: common.yml
+               group: ${spring.profiles.active}
+               refresh: true
+             - data-id: datasource.yml
+               group: ${spring.profiles.active}
+               refresh: true
+             - data-id: security.yml
+               group: ${spring.profiles.active}
+               refresh: true

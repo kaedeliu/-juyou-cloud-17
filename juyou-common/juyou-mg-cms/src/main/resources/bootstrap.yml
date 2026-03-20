@@ -1,0 +1,38 @@
+spring:
+  application:
+     name: active
+  profiles:
+     active: dev
+  cloud:
+     nacos:
+        config:
+          enabled: true
+          server-addr: 127.0.0.1:8848
+          refresh-enabled: true
+          group: ${spring.profiles.active}
+          namespace: office-${spring.profiles.active}  # 指定命名空间，如果不是public，那么必须指定命名空间的id，注意，不是空间
+          file-extension: yml
+          #shared-dataids: redis.yml,common.yml
+          #refreshable-dataids: redis.yml,common.yml
+          ext-config:
+             - data-id: datasource.yml
+               group: ${spring.profiles.active}
+               refresh: true
+             - data-id: shiro.yml
+               group: ${spring.profiles.active}
+               refresh: true
+             - data-id: redis.yml
+               group: ${spring.profiles.active}
+               refresh: true
+             - data-id: quartz.yml
+               group: ${spring.profiles.active}
+               refresh: true
+             - data-id: common.yml
+               group: ${spring.profiles.active}
+               refresh: true
+             - data-id: error.yml
+               group: ${spring.profiles.active}
+               refresh: true
+             - data-id: checkmessage.yml
+               group: ${spring.profiles.active}
+               refresh: true

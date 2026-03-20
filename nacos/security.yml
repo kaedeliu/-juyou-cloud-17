@@ -1,0 +1,10 @@
+cdyx:
+    security:
+        excludeUrls: /doc.html,/webjars/*/*,/favicon.ico,/swagger-resources,/def-api-docs,/*/v3/api-docs,/admin/table-info/*,/admin/sys/user/login,/**
+        roleWhilePath:
+            client: 
+                - /test1/*
+                - /test2/*
+            clientManage:
+                - /test31/*
+                - /test4/*

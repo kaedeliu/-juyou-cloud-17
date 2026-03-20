@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <springProperty scope="context" name="PROJECT_NAME" source="spring.application.name"  defaultValue=""/>
+
+    <contextName>nacos</contextName>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%level] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+</configuration>

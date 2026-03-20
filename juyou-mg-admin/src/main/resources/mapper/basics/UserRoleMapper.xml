@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juyou.admin.sys.mapper.UserRoleMapper">
+	<select id="queryByUserId" parameterType="String" resultType="String">
+		SELECT
+			r.role_id
+		FROM
+			juyou_sys_user_role ur,
+			juyou_sys_role r 
+		WHERE
+			ur.role_id = r.role_id 
+			AND r.STATUS = 1
+			AND ur.user_id = #{userId}
+		ORDER BY r.create_time desc
+	</select>
+</mapper>

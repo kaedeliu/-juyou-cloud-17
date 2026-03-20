@@ -1,0 +1,13 @@
+server: 
+   port: 8190
+spring:
+    mvc:
+      pathmatch:
+            use-suffix-pattern: false
+            matching-strategy: ant_path_matcher
+cdyx:
+  task:
+    #是否启动任务
+    enable: false
+    #任务类型id，多个,间隔
+    type: 3

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.juyou</groupId>
+        <artifactId>juyou-common</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <version>${project.module.version}</version>
+    <artifactId>juyou-pay</artifactId>
+    <description>处理支付相关业务模块</description>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-pay</artifactId>
+            <version>4.4.9.B</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.alipay.sdk/alipay-sdk-java -->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>4.35.101.ALL</version>
+        </dependency>
+    </dependencies>
+
+</project>

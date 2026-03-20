@@ -1,0 +1,24 @@
+spring:
+  nacos: 127.0.0.1:8848
+  cloud:
+     inetutils:
+        preferred-networks: 127.0.0
+     nacos:
+        discovery:
+           enabled: true
+           namespace: office-${spring.profiles.active}
+           server-addr: ${spring.nacos}
+           ip: 127.0.0.1
+  servlet:
+    multipart:
+      max-request-size: 50MB
+      max-file-size: 50MB
+logging:
+  exception:
+    type: 2
+  request:
+    type: 2
+  level:
+    com.cdyx.gen.mapper: debug
+    com.cdyx.common.mapper: debug
+    com.cdyx.slide.mapper: debug

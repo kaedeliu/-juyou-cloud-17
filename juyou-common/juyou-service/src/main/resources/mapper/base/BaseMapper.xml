@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juyou.common.base.mapper.BaseMapper">
+
+	<resultMap id="Permission" type="com.juyou.common.permissiondata.Permission">
+		<result column="perms" property="perms" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<!-- 获取用户角色 -->
+	<select id="queryUserRole" parameterType="String" resultType="java.lang.String">
+		select role_code from yu_role a where EXISTS(SELECT role_id from yu_user_role b where a.role_id=b.role_id and b.user_id=#{id})
+	</select>
+	
+	<!-- 获取用户权限 -->
+	<select id="queryUserPermission" parameterType="String" resultMap="Permission">
+		<!-- 角色权限 -->
+		SELECT perms FROM yu_permission e WHERE EXISTS(
+			SELECT a.permission_id FROM
+			yu_role_permission a JOIN yu_role b ON a.role_id=b.role_id
+			JOIN yu_user_role c ON c.role_id =b.role_id
+			JOIN yu_user d ON c.user_id = d.user_id WHERE e.permission_id =a.permission_id AND e.perms is not null AND d.user_id=#{id}
+		) group by perms
+	</select>
+	
+	<!-- 获取菜单得数据权限 -->
+	<select id="queryDataRule" parameterType="String" resultType="com.juyou.common.permissiondata.PermissionDataRule">
+		 SELECT * from yu_permission a where EXISTS(select permission_id from yu_permission b where a.permission_id=b.permission_id and b.data_rule_code=#{code}) and status=1
+	</select>
+	
+	<!-- 获取用户数据权限(忽略菜单，方便缓存) -->
+	<select id="queryUserDataRule" parameterType="String" resultType="String">
+		select data_rule_ids
+		from
+		yu_user as a
+		join yu_user_role as b on a.user_id=b.user_id
+		join yu_role as r on r.role_id=b.role_id
+		join yu_role as pr on pr.role_code = r.params_role_code
+		join yu_role_permission p ON pr.role_id = p.role_id AND p.data_rule_ids IS NOT NULL
+		where
+		a.user_id = #{id} group by p.data_rule_ids
+	</select>
+	
+	<!-- 登录用户获取信息 -->
+<!--	<select id="queryLoginUserInfo" parameterType="String" resultType="com.juyou.common.dto.LoginUserDto">-->
+<!--		SELECT a.* FROM yu_user a  where a.user_id=#{code}-->
+<!--	</select>-->
+
+<!--	&lt;!&ndash; 登录客户端用户获取信息 &ndash;&gt;-->
+<!--	<select id="queryCcLoginUserInfo" parameterType="String" resultType="com.juyou.common.dto.LoginUserDto">-->
+<!--		SELECT a.* FROM ycu_user a  where a.user_id=#{code}-->
+<!--	</select>-->
+
+	<!-- 获取所有定义的数据权限 -->
+	<select id="queryAllPermissionData" resultType="com.juyou.common.permissiondata.PermissionDataRule">
+		SELECT a.*,b.perms  FROM yu_permission_data_rule a INNER JOIN yu_permission b ON a.permission_id=b.permission_id  WHERE a.status=1
+	</select>
+	
+	<!-- 保存操作日志 -->
+	<insert id="saveOperation" >
+		INSERT INTO cc_operation (
+				  operation_id,
+				  log_type,
+				  log_content,
+				  operate_type,
+				  user_id,
+				  username,
+				  ip,
+				  method,
+				  request_url,
+				  request_param,
+				  request_type,
+				  cost_time,
+				  create_time,
+				  create_name
+				) 
+				VALUES
+				 <foreach collection ="list" item="operation" separator =",">
+				 	(
+						    #{operation.operationId,jdbcType=INTEGER},
+						    #{operation.logType,jdbcType=INTEGER},
+						    #{operation.logContent,jdbcType=VARCHAR},
+						    #{operation.operateType,jdbcType=INTEGER},
+						    #{operation.userId,jdbcType=VARCHAR},
+						    #{operation.username,jdbcType=VARCHAR},
+						    #{operation.ip,jdbcType=VARCHAR},
+						    #{operation.method,jdbcType=VARCHAR},
+						    #{operation.requestUrl,jdbcType=VARCHAR},
+						    #{operation.requestParam,jdbcType=VARCHAR},
+						    #{operation.requestType,jdbcType=VARCHAR},
+						    #{operation.costTime,jdbcType=BIGINT},
+						    #{operation.createTime,jdbcType=TIMESTAMP},
+						    #{operation.createName,jdbcType=VARCHAR}
+				  	)
+				 </foreach>
+				  
+	</insert>
+	
+	<!-- 获取定时任务信息 -->
+	<select id="selectCommonTask" resultType="com.juyou.common.task.CommonTask">
+		select * from cc_common_task
+		<where>
+			<if test="type!=null and type!=''">
+				and type in (${type})
+			</if>
+			<if test="status!=null">
+				and status = ${status}
+			</if>
+		</where>
+	</select>
+	
+	
+	<!-- 获取定时任务信息 -->
+	<select id="selectCommonTaskById" resultType="com.juyou.common.task.CommonTask">
+		select *,date_add(now(),interval -5 second) as now_date from cc_common_task where task_id=#{id}
+	</select>
+	<!-- 更新定时任务 -->
+	<update id="updateCommonTaskById" parameterType="com.juyou.common.task.CommonTask">
+		update cc_common_task set
+		<trim  suffixOverrides=",">
+				<if test="1==1">error_msg=#{errorMsg},</if>
+				<if test="lastRunTime !=null">last_run_time=#{lastRunTime},</if>
+		</trim>
+		where task_id=#{taskid}
+	</update>
+
+
+	
+	<update id="updatePkNum">
+		update cc_pk set increasing_val=#{increasingVal} where pk_type=#{pkType}
+	</update>
+	<insert id="insertPk">
+		INSERT into cc_pk(pk_type,increasing_val) values(#{pkType},#{increasingVal})
+	</insert>
+	<select id="selectPkByType" parameterType="String" resultType="Integer">
+		select increasing_val from cc_pk where pk_type = #{pkType}
+	</select>
+
+
+</mapper>
